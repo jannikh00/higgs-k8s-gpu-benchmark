@@ -3,7 +3,7 @@ kind: Job
 metadata:
   name: jhof-fetch-data
 spec:
-  backoffLimit: 2
+  backoffLimit: 4
   template:
     spec:
       restartPolicy: Never
@@ -11,7 +11,7 @@ spec:
         kubernetes.io/arch: amd64
       containers:
         - name: fetch-data
-          image: ghcr.io/jannikh00/higgs-k8s-gpu-benchmark:12258b2d2d90f5226153c05c99fa8b5d34351512
+          image: ghcr.io/jannikh00/higgs-k8s-gpu-benchmark:e3753e23128deae9138e6a265f7b55380c72b143
           command: ["python3", "src/fetch_data.py", "--out-dir", "/data"]
           volumeMounts:
             - name: data
