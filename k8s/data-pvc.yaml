@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: <netid>-higgs-data
+  name: jhof-higgs-data
 spec:
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
       storage: 20Gi
-  storageClassName: <storage-class>
+  storageClassName: rook-ceph-block-fullerton

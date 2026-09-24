@@ -1,31 +1,29 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: <netid>-fetch-data
+  name: jhof-fetch-data
 spec:
-  backoffLimit: 0
+  backoffLimit: 2
   template:
     spec:
       restartPolicy: Never
       nodeSelector:
         kubernetes.io/arch: amd64
-      imagePullSecrets:
-        - name: ghcr-pull
       containers:
         - name: fetch-data
-          image: ghcr.io/jannikh00/higgs-k8s-gpu-benchmark:<sha>
+          image: ghcr.io/jannikh00/higgs-k8s-gpu-benchmark:12258b2d2d90f5226153c05c99fa8b5d34351512
           command: ["python3", "src/fetch_data.py", "--out-dir", "/data"]
           volumeMounts:
             - name: data
               mountPath: /data
           resources:
             requests:
-              cpu: "2"
-              memory: 4Gi
+              cpu: "1"
+              memory: 2Gi
             limits:
-              cpu: "2"
-              memory: 4Gi
+              cpu: "1"
+              memory: 2Gi
       volumes:
         - name: data
           persistentVolumeClaim:
-            claimName: <netid>-higgs-data
+            claimName: jhof-higgs-data
