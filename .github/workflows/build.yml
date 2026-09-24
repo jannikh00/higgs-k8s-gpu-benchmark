@@ -31,6 +31,5 @@ jobs:
           tags: |
             ghcr.io/jannikh00/higgs-k8s-gpu-benchmark:latest
             ghcr.io/jannikh00/higgs-k8s-gpu-benchmark:${{ github.sha }}
-          # The cu124 torch stack is ~3 GB of wheels; cache it between pushes.
           cache-from: type=gha
           cache-to: type=gha,mode=max

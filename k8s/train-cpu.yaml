@@ -1,5 +1,3 @@
-# Task 2(b): CPU training run. Identical to train-gpu.yaml except no GPU is requested.
-# TODO: replace <netid> and <sha>.
 apiVersion: batch/v1
 kind: Job
 metadata:

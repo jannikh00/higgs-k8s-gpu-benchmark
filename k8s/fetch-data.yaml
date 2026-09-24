@@ -1,6 +1,3 @@
-# Phase 3: one-off Job that downloads and decompresses HIGGS.csv onto the PVC.
-# No GPU requested -- this is pure download and I/O.
-# TODO: replace <netid> and <sha>.
 apiVersion: batch/v1
 kind: Job
 metadata:
