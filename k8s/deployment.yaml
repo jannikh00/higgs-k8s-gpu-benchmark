@@ -1,25 +1,23 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: <netid>-gpu-check
+  name: jhof-gpu-check
 spec:
-  backoffLimit: 0
+  backoffLimit: 4
   template:
     spec:
       restartPolicy: Never
       nodeSelector:
         kubernetes.io/arch: amd64
-      imagePullSecrets:
-        - name: ghcr-pull
       containers:
         - name: gpu-check
-          image: ghcr.io/jannikh00/higgs-k8s-gpu-benchmark:<sha>
+          image: ghcr.io/jannikh00/higgs-k8s-gpu-benchmark:12258b2d2d90f5226153c05c99fa8b5d34351512
           resources:
             requests:
               cpu: "1"
-              memory: 2Gi
+              memory: 4Gi
               nvidia.com/gpu: 1
             limits:
               cpu: "1"
-              memory: 2Gi
+              memory: 4Gi
               nvidia.com/gpu: 1
