@@ -1,0 +1,9 @@
+# CUDA 12.4 wheels, matching the nvidia/cuda:12.4.1 base image.
+# Verify the Nautilus GPU driver supports CUDA 12.4 before the first real run
+# (the GPU test output or `nvidia-smi` shows the driver version).
+--extra-index-url https://download.pytorch.org/whl/cu124
+
+torch==2.4.1
+numpy==1.26.4
+pandas==2.2.2
+pyarrow==16.1.0

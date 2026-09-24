@@ -1,0 +1,34 @@
+# Phase 3: one-off Job that downloads and decompresses HIGGS.csv onto the PVC.
+# No GPU requested -- this is pure download and I/O.
+# TODO: replace <netid> and <sha>.
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: <netid>-fetch-data
+spec:
+  backoffLimit: 0
+  template:
+    spec:
+      restartPolicy: Never
+      nodeSelector:
+        kubernetes.io/arch: amd64
+      imagePullSecrets:
+        - name: ghcr-pull
+      containers:
+        - name: fetch-data
+          image: ghcr.io/jannikh00/higgs-k8s-gpu-benchmark:<sha>
+          command: ["python3", "src/fetch_data.py", "--out-dir", "/data"]
+          volumeMounts:
+            - name: data
+              mountPath: /data
+          resources:
+            requests:
+              cpu: "2"
+              memory: 4Gi
+            limits:
+              cpu: "2"
+              memory: 4Gi
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: <netid>-higgs-data

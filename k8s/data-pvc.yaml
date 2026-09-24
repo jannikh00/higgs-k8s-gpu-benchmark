@@ -1,0 +1,14 @@
+# Phase 3: storage for the decompressed HIGGS.csv (~8 GB).
+# TODO: confirm the current NRP storage class name before applying -- they change.
+# TODO: replace <netid>; prefix the name so it does not collide in a shared namespace.
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: <netid>-higgs-data
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 20Gi
+  storageClassName: <storage-class>

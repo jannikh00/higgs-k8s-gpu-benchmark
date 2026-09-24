@@ -1,0 +1,46 @@
+# Task 2(b): GPU training run.
+# CPU and memory match train-cpu.yaml so data loading is comparable.
+# TODO: replace <netid> and <sha>.
+# TODO (optional): pin to one GPU model with node affinity on nvidia.com/gpu.product
+#                  so the result is not tied to whichever card you happened to get.
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: <netid>-train-gpu
+spec:
+  backoffLimit: 0
+  template:
+    spec:
+      restartPolicy: Never
+      nodeSelector:
+        kubernetes.io/arch: amd64
+      imagePullSecrets:
+        - name: ghcr-pull
+      containers:
+        - name: train-gpu
+          image: ghcr.io/jannikh00/higgs-k8s-gpu-benchmark:<sha>
+          command:
+            - python3
+            - src/train.py
+            - --device
+            - cuda
+            - --threads
+            - "8"
+            - --data-path
+            - /data/HIGGS.csv
+          volumeMounts:
+            - name: data
+              mountPath: /data
+          resources:
+            requests:
+              cpu: "8"
+              memory: 16Gi
+              nvidia.com/gpu: 1
+            limits:
+              cpu: "8"
+              memory: 16Gi
+              nvidia.com/gpu: 1
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: <netid>-higgs-data

@@ -1,0 +1,27 @@
+# Task 1: GPU verification. One Job, not a standalone Pod.
+# Replace <netid> and <sha> before applying.
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: <netid>-gpu-check
+spec:
+  backoffLimit: 0
+  template:
+    spec:
+      restartPolicy: Never
+      nodeSelector:
+        kubernetes.io/arch: amd64
+      imagePullSecrets:
+        - name: ghcr-pull
+      containers:
+        - name: gpu-check
+          image: ghcr.io/jannikh00/higgs-k8s-gpu-benchmark:<sha>
+          resources:
+            requests:
+              cpu: "1"
+              memory: 2Gi
+              nvidia.com/gpu: 1
+            limits:
+              cpu: "1"
+              memory: 2Gi
+              nvidia.com/gpu: 1

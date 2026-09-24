@@ -1,0 +1,41 @@
+# Task 2(b): CPU training run. Identical to train-gpu.yaml except no GPU is requested.
+# TODO: replace <netid> and <sha>.
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: <netid>-train-cpu
+spec:
+  backoffLimit: 0
+  template:
+    spec:
+      restartPolicy: Never
+      nodeSelector:
+        kubernetes.io/arch: amd64
+      imagePullSecrets:
+        - name: ghcr-pull
+      containers:
+        - name: train-cpu
+          image: ghcr.io/jannikh00/higgs-k8s-gpu-benchmark:<sha>
+          command:
+            - python3
+            - src/train.py
+            - --device
+            - cpu
+            - --threads
+            - "8"
+            - --data-path
+            - /data/HIGGS.csv
+          volumeMounts:
+            - name: data
+              mountPath: /data
+          resources:
+            requests:
+              cpu: "8"
+              memory: 16Gi
+            limits:
+              cpu: "8"
+              memory: 16Gi
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: <netid>-higgs-data
