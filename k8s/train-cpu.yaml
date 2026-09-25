@@ -1,19 +1,20 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: <netid>-train-cpu
+  name: jhof-train-cpu
 spec:
-  backoffLimit: 0
+  backoffLimit: 4
   template:
     spec:
       restartPolicy: Never
       nodeSelector:
         kubernetes.io/arch: amd64
-      imagePullSecrets:
-        - name: ghcr-pull
+        # Same zone as the GPU run, so both see identical storage locality.
+        # Reading this volume from another region drops throughput to very little
+        topology.kubernetes.io/zone: ucsd
       containers:
         - name: train-cpu
-          image: ghcr.io/jannikh00/higgs-k8s-gpu-benchmark:<sha>
+          image: ghcr.io/jannikh00/higgs-k8s-gpu-benchmark:cdfca6a9c70464c39d4589aa78e74dc9bcfcc26d
           command:
             - python3
             - src/train.py
@@ -21,6 +22,8 @@ spec:
             - cpu
             - --threads
             - "8"
+            - --batch-size
+            - "1024"
             - --data-path
             - /data/HIGGS.csv
           volumeMounts:
@@ -36,4 +39,4 @@ spec:
       volumes:
         - name: data
           persistentVolumeClaim:
-            claimName: <netid>-higgs-data
+            claimName: jhof-higgs-data
